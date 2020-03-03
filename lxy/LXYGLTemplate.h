@@ -8,6 +8,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "LXYTools.h"
+
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -18,19 +20,22 @@ const unsigned int SCR_HEIGHT = 600;
 
 const char* vsSource = "#version 450 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"out vec2 texCoord;"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"	texCoord = (aPos.xy + vec2(1.0f)) * 0.5f;"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
 "}\0";
 
-int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource)
+int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource, 
+	const char* title)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title, NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -84,10 +89,10 @@ int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource)
 	glDeleteShader(fragmentShader);
 
 	float vertices[] = {
+		-1.0f,  1.0f, 0.0f,   // top left
 		 1.0f,  1.0f, 0.0f,  // top right
 		 1.0f, -1.0f, 0.0f,  // bottom right
-		-1.0f, -1.0f, 0.0f,  // bottom left
-		-1.0f,  1.0f, 0.0f   // top left 
+		-1.0f, -1.0f, 0.0f  // bottom left
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
@@ -177,8 +182,23 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-// 只需要提供fragment shader
-int mainCore(const char* fragmentShaderSource)
+// 需要提供fragment shader
+int mainCoreBySource(const char* fragmentShaderSource, const char* title)
 {
-	return mainCore(vsSource, fragmentShaderSource);
+	return mainCore(vsSource, fragmentShaderSource, title);
+}
+
+// 需要提供 shaders 路径
+int mainCoreByPath(const char* vsPath, const char* fsPath, const char* title)
+{
+	string vertexShaderSource = LXY::readFile(vsPath);
+	string fragmentShaderSource = LXY::readFile(fsPath);
+
+	return mainCore(vertexShaderSource.c_str(), fragmentShaderSource.c_str(), title);
+}
+
+int mainCoreByPath(const char* fsPath, const char* title = "Texturing and Modeling Procedurally")
+{
+	string fragmentShaderSource = LXY::readFile(fsPath);
+	return mainCore(vsSource, fragmentShaderSource.c_str(), title);
 }

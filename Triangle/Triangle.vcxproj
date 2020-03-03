@@ -128,9 +128,6 @@
     <ClCompile Include="..\lxy\glad.c" />
     <ClCompile Include="triangle_main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\lxy\LXYGLTemplate.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
