@@ -17,8 +17,8 @@ vec3 mortarColor = vec3(0.5f, 0.5f, 0.5f);
 
 void main()
 {
-    float x = texCoord.x / brickWidth;
-    float y = texCoord.y / brickHeight;
+    float x = texCoord.x / bmWidth;
+    float y = texCoord.y / bmHeight;
 
     x += 0.5f * step(0.5f, fract(y * 0.5f));
     x = fract(x);
