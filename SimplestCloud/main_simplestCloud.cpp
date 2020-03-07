@@ -1,5 +1,5 @@
 
-#include "../lxy/LXYGLTemplate.h"
+#include <LXY/LXYGLTemplate.h>
 
 int main()
 {
