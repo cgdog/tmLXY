@@ -34,8 +34,19 @@ int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource,
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+	
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, title, NULL, NULL);
+
+	// 设置窗口的宽高比
+	glfwSetWindowAspectRatio(window, SCR_WIDTH, SCR_HEIGHT);
+	// 设置窗口的limits
+	//void glfwSetWindowSizeLimits(GLFWwindow * window,
+	//	int 	minwidth,
+	//	int 	minheight,
+	//	int 	maxwidth,
+	//	int 	maxheight
+	//);
+
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
