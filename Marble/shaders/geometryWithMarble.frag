@@ -2,11 +2,12 @@
 
 in vec2 texCoord;
 out vec4 fragColor;
+uniform vec2 iResolution;
 
 vec3 finalColor;
 
 const float EPSILON = .0001;
-const float SIZE_RATIO = 3./4.; // 窗口高宽比。
+const float SIZE_RATIO = iResolution.y/iResolution.x; // 窗口高宽比。
 
 /////////////////// begin modeling ////////////////////
 // 球建模(利用sdf, 即signed distance function)

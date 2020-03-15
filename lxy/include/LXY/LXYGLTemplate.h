@@ -27,6 +27,8 @@ const char* vsSource = "#version 450 core\n"
 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
 "}\0";
 
+GLint iResolutionLoc = -1;
+
 int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource, 
 	const char* title)
 {
@@ -61,7 +63,7 @@ int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource,
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-
+	
 	int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
@@ -98,6 +100,10 @@ int mainCore(const char* vertexShaderSource, const char* fragmentShaderSource,
 	}
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	glUseProgram(shaderProgram);
+	iResolutionLoc = glGetUniformLocation(shaderProgram, "iResolution");
+	glUniform2f(iResolutionLoc, static_cast<float>(SCR_WIDTH), static_cast<float>(SCR_HEIGHT));
 
 	float vertices[] = {
 		-1.0f,  1.0f, 0.0f,   // top left
@@ -191,6 +197,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
+	if (iResolutionLoc != -1)
+	{
+		glUniform2f(iResolutionLoc, static_cast<float>(width), static_cast<float>(height));
+	}
 }
 
 // 需要提供fragment shader
